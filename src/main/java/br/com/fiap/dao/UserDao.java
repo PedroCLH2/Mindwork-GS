@@ -16,7 +16,8 @@ public class UserDao {
 
     public List<User> listar() throws SQLException {
         List<User> lista = new ArrayList<>();
-        String sql = "SELECT user_id, name, email, registration_date FROM users ORDER BY user_id";
+        
+        String sql = "SELECT user_id, name, email, password, username, registration_date FROM users ORDER BY user_id";
 
         try (Connection conn = dataSource.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -24,10 +25,13 @@ public class UserDao {
             while (rs.next()) {
                 User u = new User();
                 u.setUser_id(rs.getLong("user_id"));
-                u.setName(rs.getString("name"));
+                u.setNome(rs.getString("name"));
                 u.setEmail(rs.getString("email"));
                 u.setRegistration_date(rs.getDate("registration_date").toLocalDate());
-                u.setSenha("123456");
+
+                u.setSenha(rs.getString("password"));
+                u.setNomeUser(rs.getString("username"));
+
                 lista.add(u);
             }
         }
@@ -35,7 +39,6 @@ public class UserDao {
     }
 
     public void inserir(User user) throws SQLException {
-        // Agora salvamos também a SENHA e o USERNAME
         String sql = "INSERT INTO users (name, email, password, username, registration_date) VALUES (?, ?, ?, ?, CURRENT_DATE)";
 
         try (Connection conn = dataSource.getConnection();

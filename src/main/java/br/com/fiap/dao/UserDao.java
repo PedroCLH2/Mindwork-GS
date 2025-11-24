@@ -16,7 +16,7 @@ public class UserDao {
 
     public List<User> listar() throws SQLException {
         List<User> lista = new ArrayList<>();
-        
+
         String sql = "SELECT user_id, name, email, password, username, registration_date FROM users ORDER BY user_id";
 
         try (Connection conn = dataSource.getConnection();
